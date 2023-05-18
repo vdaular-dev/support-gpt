@@ -15,10 +15,7 @@ os.environ.get('OPENAI_API_KEY')
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:3000",
-    "http://localhost:3001",
+    "https://papaya-bavarois-c4cea1.netlify.app",
 ]
 
 app.add_middleware(
