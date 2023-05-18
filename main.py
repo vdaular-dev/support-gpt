@@ -2,12 +2,16 @@ import os
 import pickle
 
 from dotenv import load_dotenv
+from fastapi import FastAPI
+
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from llama_index import GPTVectorStoreIndex, download_loader
 
 load_dotenv()
 os.environ.get('OPENAI_API_KEY')
+
+app = FastAPI()
 
 # Authenticate our Google account to discover Google Docs.
 def authorize_gdocs():
@@ -27,7 +31,8 @@ def authorize_gdocs():
         with open("token.pickle", 'wb') as token:
             pickle.dump(cred, token)
 
-if __name__ == '__main__':
+@app.get("/")
+async def root(prompt: str):
     authorize_gdocs()
     GoogleDocsReader = download_loader('GoogleDocsReader')
     gdoc_ids = ['1qmG5KtGh7eanbgM_2fHagz11uhJ-USlHiZQs1nlSJxA']
@@ -36,11 +41,13 @@ if __name__ == '__main__':
     index = GPTVectorStoreIndex.from_documents(documents)
 
     while True:
-        prompt = input('Type your prompt...')
+        # prompt = input('Type your prompt...')
         query_engine = index.as_query_engine()
         response = query_engine.query(prompt)
-        print(response)
+        # print(response)
 
         # Get the last token usage
         # last_token_usage = index.llm_predictor.last_token_usage
         # print(f"last_token_usage={last_token_usage}")
+        
+        return {"message": response}
