@@ -16,6 +16,7 @@ app = FastAPI()
 
 origins = [
     "https://papaya-bavarois-c4cea1.netlify.app",
+    "https://master--papaya-bavarois-c4cea1.netlify.app/",
 ]
 
 app.add_middleware(
